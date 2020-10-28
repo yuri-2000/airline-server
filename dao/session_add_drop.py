@@ -52,15 +52,15 @@ def add_Seat(airplane_i: int, seat_num, Type):
     session.commit()
 
 
-def add_table_a_f(airplane_id: int):
-    Flight.airplanes = [airplane_id]
-    session.add(Flight.airplanes)
+def add_airplane_flight(airplane_id, flight_id):
+    a_f = airplane_flight(Airplane_id=airplane_id, Flight_id=flight_id)
+    session.add(a_f)
     session.commit()
 
 
-def add_table_p_f(passenger_id: int):
-    Flight.passengers = [passenger_id]
-    session.add(Flight)
+def add_passenger_flight(passenger_id, flight_id):
+    p_f = passenger_flight(Passenger_id=passenger_id, Flight_id=flight_id)
+    session.add(p_f)
     session.commit()
 
 
@@ -77,8 +77,8 @@ add_Airplane(1, 'TYPE')
 add_Passenger('normal', 0)
 add_Seat(1, 'seat_num', 'eco')
 add_Ticket(1, 1, 1, 1, 'SHA', 'GUA', datetime.datetime(2020, 10, 25, 10, 30), 520)
-# add_table_a_f(1, 1)
-# add_table_p_f(1, 1)
+add_airplane_flight(1, 1)
+add_passenger_flight(1, 1)
 # Flight.airplanes = [1]
 # session.commit()
 

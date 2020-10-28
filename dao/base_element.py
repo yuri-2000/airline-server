@@ -1,84 +1,147 @@
-from dao.base_element import *
+from pymysql import NULL
+from sqlalchemy import Column, String, create_engine, Integer, DateTime, FLOAT, ForeignKey, Table
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+import datetime
+
+Base = declarative_base()
+engine = create_engine('mysql+pymysql://root:daiski@127.0.0.1:3306/Airline?charset=utf8', echo=True)
+
+# airplane_flight = Table('airplane_flight', Base.metadata,  # 飞机-航班 m:n
+#                         Column('Airplane_id', Integer, ForeignKey('Airplane.id')),  #
+#                         Column('Flight_id', Integer, ForeignKey('Flight.id')),  #
+#                         )
+#
+# passenger_flight = Table('passenger_flight', Base.metadata,
+#                          Column('Passenger_id', Integer, ForeignKey('Passenger.id')),  #
+#                          Column('Flight_id', Integer, ForeignKey('Flight.id')),  #
+#                          )
 
 
-def add_Airline_company(name):
-    airline_company = Airline_company(name=name)
-    session.add(airline_company)
-    session.commit()
+class airplane_flight(Base):
+    __tablename__ = 'Airplane_flight'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Airplane_id = Column(Integer, ForeignKey('Airplane.id'))
+    Flight_id = Column(Integer, ForeignKey('Flight.id'))
 
 
-def add_Airline(a_n, a_c_id, sta, des, f_n, a_m, s_t, a_t, p_n_e, p_n_f, mil, s_p):
-    airline = Airline(airline_num=a_n, Airline_company_id=a_c_id, start=sta, destination=des, flight_num=f_n,
-                      air_model=a_m, start_time=s_t, arrive_time=a_t,
-                      passenger_num_eco=p_n_e, passenger_num_fir=p_n_f, mileage=mil, standard_price=s_p)
-    session.add(airline)
-    session.commit()
+class passenger_flight(Base):
+    __tablename__ = 'Passenger_flight'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Passenger_id = Column(Integer, ForeignKey('Passenger.id'))
+    Flight_id = Column(Integer, ForeignKey('Flight.id'))
 
 
-def add_Flight(airline_i: int, airport_i: int, f_n, date):
-    flight = Flight(Airline_id=airline_i, Airport_id=airport_i, flight_num=f_n, date=date)
-    session.add(flight)
-    session.commit()
+class Airline_company(Base):
+    __tablename__ = 'Airline_company'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), nullable=False)
 
 
-def add_Airport(name):
-    airport = Airport(name=name)
-    session.add(airport)
-    session.commit()
+class Airline(Base):
+    __tablename__ = 'Airline'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    airline_num = Column(String(20))
+    Airline_company_id = Column(Integer, ForeignKey('Airline_company.id'))  # 航空公司-航线 1:n 外键
+    start = Column(String(20))
+    destination = Column(String(20))
+    flight_num = Column(String(20))
+    air_model = Column(String(20))
+    start_time = Column(DateTime, default=datetime.datetime.now)
+    arrive_time = Column(DateTime, default=datetime.datetime.now)
+    passenger_num_eco = Column(Integer)
+    passenger_num_fir = Column(Integer)
+    mileage = Column(FLOAT)
+    standard_price = Column(Integer)
+
+    def __repr__(self):
+        tql = "Airline(id={}, Airline_num={}, Airline_company_id={}, start={}, destination={}, flight_num={}, " \
+              "air_model={}, start_time={}, arrive_time={}, passenger_num_eco={}, passenger_num_fir={}, mileage={}, " \
+              "standard_price={})"
+        return tql.format(self.id, self.airline_num, self.Airline_company_id, self.start, self.destination,
+                          self.flight_num, self.air_model, self.start_time, self.arrive_time, self.passenger_num_eco,
+                          self.passenger_num_fir, self.mileage, self.standard_price)
 
 
-def add_Ticket(airport_i: int, flight_i: int, pas_i: int, seat_i: int, sta, des, date, price: int):
-    ticket = Ticket(Airport_id=airport_i, flight_id=flight_i, Passenger_id=pas_i, Seat_id=seat_i, start=sta,
-                    destination=des, date=date, price=price)
-    session.add(ticket)
-    session.commit()
+class Flight(Base):
+    __tablename__ = 'Flight'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Airline_id = Column(Integer, ForeignKey('Airline.id'))  # 航线-航班 1:n 外键
+    Airport_id = Column(Integer, ForeignKey("Airport.id"))  # 机场-航班 1:n 外键
+    flight_num = Column(String(20))
+    date = Column(DateTime, default=datetime.datetime.now)
+
+    def __repr__(self):
+        tql = "Flight(id={}, Airline_id={}, Airport_id={}, flight_num={}, date={})"
+        return tql.format(self.id, self.Airline_id, self.Airport_id, self.flight_num, self.date)
 
 
-def add_Passenger(typ, mile_score: int):
-    passenger = Passenger(type=typ, mile_score=mile_score)
-    session.add(passenger)
-    session.commit()
+class Airport(Base):
+    __tablename__ = 'Airport'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20))
 
 
-def add_Airplane(a_c_i: int, a_m):
-    airplane = Airplane(Airline_company_id=a_c_i, air_model=a_m)
-    session.add(airplane)
-    session.commit()
+class Ticket(Base):
+    __tablename__ = 'Ticket'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Airport_id = Column(Integer, ForeignKey('Airport.id'))  # 机票-机场 n:1 外键
+    flight_id = Column(Integer, ForeignKey('Flight.id'))  # 机票-航班 n:1 外键
+    Passenger_id = Column(Integer, ForeignKey('Passenger.id'))  # 机票-客户 n:1 外键
+    Seat_id = Column(Integer, ForeignKey('Seat.id'))  # 机票-座位 1:1 外键
+    start = Column(String(20))
+    destination = Column(String(20))
+    date = Column(DateTime)
+    price = Column(Integer)
 
 
-def add_Seat(airplane_i: int, seat_num, Type):
-    seat = Seat(Airplane_id=airplane_i, seat_num=seat_num, CLASS=Type)
-    session.add(seat)
-    session.commit()
+class Passenger(Base):
+    __tablename__ = 'Passenger'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(String(20), default='普通旅客')
+    mile_score = Column(Integer, default=0)
 
 
-def add_table_a_f(airplane_id: int):
-    Flight.airplanes = [airplane_id]
-    session.add(Flight.airplanes)
-    session.commit()
+class Airplane(Base):
+    __tablename__ = 'Airplane'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Airline_company_id = Column(Integer, ForeignKey('Airline_company.id'))  # 航空公司-飞机 1:n 外键
+    air_model = Column(String(20))
 
 
-def add_table_p_f(passenger_id: int):
-    Flight.passengers = [passenger_id]
-    session.add(Flight)
-    session.commit()
+class Seat(Base):
+    __tablename__ = 'Seat'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Airplane_id = Column(Integer, ForeignKey('Airplane.id'))  # 飞机-座位 1:n 外键
+    seat_num = Column(String(20))
+    CLASS = (String(20))
 
 
-Session = sessionmaker(bind=engine)
-session = Session()
+def init_db():
+    Base.metadata.create_all(engine)
 
 
-add_Airline_company('九元航空')
-add_Airline('airline_num', 1, 'SHA', 'GUA', 'flight_num', 'TYPE', datetime.datetime(2020, 10, 25, 10, 30),
-            datetime.datetime(2020, 10, 27, 11), 20, 30, 800, 520)
-add_Airport('Airport')
-add_Flight(1, 1, 'flight_num', datetime.datetime(2020, 10, 25, 10, 30))
-add_Airplane(1, 'TYPE')
-add_Passenger('normal', 0)
-add_Seat(1, 'seat_num', 'eco')
-add_Ticket(1, 1, 1, 1, 'SHA', 'GUA', datetime.datetime(2020, 10, 25, 10, 30), 520)
-# add_table_a_f(1, 1)
-# add_table_p_f(1, 1)
-# Flight.airplanes = [1]
-# session.commit()
+def drop_db():
+    Base.metadata.drop_all(engine)
 
+
+'''更新入口'''
+drop_db()
+init_db()
+
+
+# session.add_all((
+#     Airline_company(name='九元航空'),
+# ))
+#
+# session.add_all([
+#     Airline(Airline_company_id=1, airline_num='C346', start='宁波', destination='广州', flight_num='C789',
+#             air_model='B820', start_time=datetime.datetime(2020, 10, 23), arrive_time=datetime.datetime(2020, 10, 24),
+#             passenger_num_eco=30, passenger_num_fir=20, mileage=50, standard_price=838),
+# ])
+#
+# session.add_all([
+#     Flight(Airline_company_id=1, flight_num='C789', date=datetime.datetime(2020, 10, 23), passenger_list='1',
+#            position='2')
+# ])
