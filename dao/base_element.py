@@ -8,16 +8,6 @@ import datetime
 Base = declarative_base()
 engine = create_engine('mysql+pymysql://root:daiski@127.0.0.1:3306/Airline?charset=utf8', echo=True)
 
-# airplane_flight = Table('airplane_flight', Base.metadata,  # 飞机-航班 m:n
-#                         Column('Airplane_id', Integer, ForeignKey('Airplane.id')),  #
-#                         Column('Flight_id', Integer, ForeignKey('Flight.id')),  #
-#                         )
-#
-# passenger_flight = Table('passenger_flight', Base.metadata,
-#                          Column('Passenger_id', Integer, ForeignKey('Passenger.id')),  #
-#                          Column('Flight_id', Integer, ForeignKey('Flight.id')),  #
-#                          )
-
 
 class airplane_flight(Base):
     __tablename__ = 'Airplane_flight'
@@ -99,6 +89,8 @@ class Ticket(Base):
 class Passenger(Base):
     __tablename__ = 'Passenger'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20))
+    sex = Column(String(20), default='M')
     type = Column(String(20), default='普通旅客')
     mile_score = Column(Integer, default=0)
 
@@ -126,22 +118,7 @@ def drop_db():
     Base.metadata.drop_all(engine)
 
 
-'''更新入口'''
-drop_db()
-init_db()
+'''建表更新入口'''
+# drop_db()
+# init_db()
 
-
-# session.add_all((
-#     Airline_company(name='九元航空'),
-# ))
-#
-# session.add_all([
-#     Airline(Airline_company_id=1, airline_num='C346', start='宁波', destination='广州', flight_num='C789',
-#             air_model='B820', start_time=datetime.datetime(2020, 10, 23), arrive_time=datetime.datetime(2020, 10, 24),
-#             passenger_num_eco=30, passenger_num_fir=20, mileage=50, standard_price=838),
-# ])
-#
-# session.add_all([
-#     Flight(Airline_company_id=1, flight_num='C789', date=datetime.datetime(2020, 10, 23), passenger_list='1',
-#            position='2')
-# ])
