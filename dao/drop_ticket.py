@@ -7,6 +7,7 @@ def deter_pi(p_name):
     ticket = session.query(Ticket).filter(Ticket.Passenger_id == passenger.id).first()
     flight = session.query(Flight).filter(Flight.id == ticket.flight_id).first()
     print(f'你的所有订票信息如下：\n航班号： {flight.flight_num}\n出发地： {ticket.start}\n目的地： {ticket.destination}')
+    return passenger.id
 
 
 def deter_fi(f_num):
@@ -15,8 +16,10 @@ def deter_fi(f_num):
     return flight.id
 
 
-def refund_ticket(flight_id):
+def refund_ticket(pass_id, flight_id):
     session.query(Ticket).filter(Ticket.flight_id == flight_id).delete()
+    session.query(passenger_flight).filter(and_(passenger_flight.Flight_id == flight_id,
+                                                passenger_flight.Passenger_id == pass_id)).delete()
     print("退票成功！")
     pass
 
@@ -33,6 +36,7 @@ if __name__ == "__main__":
     flight_num = input()
     deter_fi(flight_num)
     f_id = deter_fi(flight_num)
-    refund_ticket(f_id)
+    p_id = deter_pi(passenger_name)
+    refund_ticket(p_id, f_id)
     session.commit()
     session.close()

@@ -3,6 +3,8 @@ from sqlalchemy import Column, String, create_engine, Integer, DateTime, FLOAT, 
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.sql.elements import and_
+from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 Base = declarative_base()
@@ -45,14 +47,6 @@ class Airline(Base):
     mileage = Column(FLOAT)
     standard_price = Column(Integer)
 
-    def __repr__(self):
-        tql = "Airline(id={}, Airline_num={}, Airline_company_id={}, start={}, destination={}, flight_num={}, " \
-              "air_model={}, start_time={}, arrive_time={}, passenger_num_eco={}, passenger_num_fir={}, mileage={}, " \
-              "standard_price={})"
-        return tql.format(self.id, self.airline_num, self.Airline_company_id, self.start, self.destination,
-                          self.flight_num, self.air_model, self.start_time, self.arrive_time, self.passenger_num_eco,
-                          self.passenger_num_fir, self.mileage, self.standard_price)
-
 
 class Flight(Base):
     __tablename__ = 'Flight'
@@ -61,10 +55,6 @@ class Flight(Base):
     Airport_id = Column(Integer, ForeignKey("Airport.id"))  # 机场-航班 1:n 外键
     flight_num = Column(String(20))
     date = Column(DateTime, default=datetime.datetime.now)
-
-    def __repr__(self):
-        tql = "Flight(id={}, Airline_id={}, Airport_id={}, flight_num={}, date={})"
-        return tql.format(self.id, self.Airline_id, self.Airport_id, self.flight_num, self.date)
 
 
 class Airport(Base):
