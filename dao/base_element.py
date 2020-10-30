@@ -1,5 +1,5 @@
 from pymysql import NULL
-from sqlalchemy import Column, String, create_engine, Integer, DateTime, FLOAT, ForeignKey, Table, func
+from sqlalchemy import Column, String, create_engine, Integer, DateTime, FLOAT, ForeignKey, Table, func, exists
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 Base = declarative_base()
-engine = create_engine('mysql+pymysql://root:@127.0.0.1:3306/Airline?charset=utf8', echo=False)
+engine = create_engine('mysql+pymysql://root:daiski@127.0.0.1:3306/Airline?charset=utf8', echo=False)
 
 
 class airplane_flight(Base):

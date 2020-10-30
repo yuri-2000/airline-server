@@ -68,7 +68,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 """还原数据库入口"""
-"""测试用数据入口（添加） 1*10"""
+"""测试用数据入口（添加） 3*10"""
 # add_Airline_company('南方航空')
 # add_Airline('A0001', 1, '上海', '广州', 'A1024', '波音747', datetime.datetime(2020, 10, 25, 10, 30),
 #             datetime.datetime(2020, 10, 27, 11), 20, 30, 800, 520)
@@ -102,4 +102,3 @@ session = Session()
 # add_passenger_flight(2, 2)
 # add_airplane_flight(3, 3)
 # add_passenger_flight(3, 3)
-
