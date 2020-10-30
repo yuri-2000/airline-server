@@ -19,9 +19,11 @@ def show_airline(sta, des):
         n += 1
 
 
-def buy_ticket(pas_id, fli_id, seat_id):
+def buy_ticket(pas_id, fli_id, seat_id, sta, des):
     flight = session.query(Flight).filter(Flight.id == fli_id).first()
-    add_Ticket(flight.Airport_id, fli_id, pas_id, seat_id)
+    airline = session.query(Airline).filter(Airline.flight_num == flight.flight_num).first()
+    add_Ticket(flight.Airport_id, fli_id, pas_id, seat_id, sta, des, flight.date, airline.standard_price)
+    print(f"购票成功！您的机票信息如下：\n航班号: {flight.flight_num} 姓名：")
 
 
 if __name__ == "__main__":
@@ -31,5 +33,8 @@ if __name__ == "__main__":
     print("输入你的目的地：")
     destination = input()
     show_airline(start, destination)
+    print("输入购票的航班号")
+    flight_id = input()
+    buy_ticket(1, flight_id, 1, start, destination)
     session.commit()
     session.close()
