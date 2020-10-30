@@ -103,5 +103,3 @@ session = Session()
 # add_airplane_flight(3, 3)
 # add_passenger_flight(3, 3)
 
-
-

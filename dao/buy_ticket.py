@@ -1,4 +1,5 @@
 from dao.base_element import *
+from dao.session_add import add_Ticket, add_passenger_flight
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -10,11 +11,17 @@ def show_airline(sta, des):
     for airline in airlines:
         total = airline.passenger_num_fir + airline.passenger_num_eco
         flight = session.query(Flight).filter(Flight.Airline_id == airline.id).first()
-        query = session.query(passenger_flight).filter(Flight.id == flight.id).all()
-        rest = total - query
+        ticket_count = session.query(func.count(passenger_flight.Passenger_id)).\
+            filter(passenger_flight.Flight_id == flight.id).scalar()
+        rest = total - ticket_count
         print(f'{n}.航班号: {airline.flight_num},出发时间: {airline.start_time},预计抵达时间:{airline.arrive_time},'
-              f'票价: {airline.standard_price}, 余票量: {rest}')
+              f'票价: {airline.standard_price}, 余票量: {rest} ')
         n += 1
+
+
+def buy_ticket(pas_id, fli_id, seat_id):
+    flight = session.query(Flight).filter(Flight.id == fli_id).first()
+    add_Ticket(flight.Airport_id, fli_id, pas_id, seat_id)
 
 
 if __name__ == "__main__":
