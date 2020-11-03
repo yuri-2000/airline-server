@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 Base = declarative_base()
-engine = create_engine('mysql+pymysql://root:daiski@127.0.0.1:3306/Airline?charset=utf8', echo=False)
+engine = create_engine('mysql+pymysql://root:@127.0.0.1:3306/Airline?charset=utf8', echo=False)
 
 
 class airplane_flight(Base):
@@ -80,6 +80,7 @@ class Passenger(Base):
     __tablename__ = 'Passenger'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(20))
+    password = Column(String(128), nullable=False)
     sex = Column(String(20), default='M')
     type = Column(String(20), default='普通旅客')
     mile_score = Column(Integer, default=0)
@@ -109,6 +110,6 @@ def drop_db():
 
 
 '''建表更新入口'''
-# drop_db()
-# init_db()
+drop_db()
+init_db()
 

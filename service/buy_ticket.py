@@ -1,7 +1,7 @@
 import string
 
 from dao.base_element import *
-from dao.session_add import add_Ticket, add_passenger_flight, add_Passenger, add_Seat
+from service.session_add import add_Ticket, add_passenger_flight, add_Passenger, add_Seat
 import random
 
 Session = sessionmaker(bind=engine)
