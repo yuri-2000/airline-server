@@ -1,7 +1,7 @@
 import string
 
 from dao.base_element import *
-from server.session_add import add_Ticket, add_passenger_flight, add_Passenger, add_Seat
+from service.session_add import add_Ticket, add_passenger_flight, add_Passenger, add_Seat
 import random
 
 Session = sessionmaker(bind=engine)
@@ -71,16 +71,16 @@ def Is_exist(p_name, p_sex):
 if __name__ == "__main__":
     print("欢迎使用航空订票系统！")
     print('输入姓名和性别：')
-    name = input()
-    sex = input()
+    name = 'zsc'
+    sex = 'male'
     p_id = Is_exist(name, sex)
     print("输入你的出发地：")
-    start = input()
+    start = '上海'
     print("输入你的目的地：")
-    destination = input()
+    destination = '广州'
     show_airline(start, destination)
     print("输入购票的航班号")
-    flight_id = input()
+    flight_id = 'c4096'
     buy_ticket(name, p_id, flight_id, start, destination)
     session.commit()
     session.close()

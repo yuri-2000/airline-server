@@ -1,9 +1,9 @@
 import os
 
 HOST = '127.0.0.1'
-PASSWORD = ''
+PASSWORD = 'daiski'
 PORT = '3306'
-DATABASE = 'test'
+DATABASE = 'airline'
 USERNAME = 'root'
 
 DB_URI = "mysql+pymysql://{username}:{password}@{host}:{port}/{db}?charset=utf8".format(username=USERNAME,

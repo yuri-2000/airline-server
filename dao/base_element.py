@@ -80,6 +80,7 @@ class Passenger(Base):
     __tablename__ = 'Passenger'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(20))
+    password = Column(String(128), nullable=False)
     sex = Column(String(20), default='M')
     type = Column(String(20), default='普通旅客')
     mile_score = Column(Integer, default=0)
