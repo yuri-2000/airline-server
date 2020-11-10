@@ -1,10 +1,12 @@
 from flask.blueprints import Blueprint
 from typing import *
+import datetime
 from flask import request
 from server.passenger_login import passenger_login
 from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
+from server.get_airline import get_airline
 
 passenger_management = Blueprint('passenger', __name__, url_prefix='/passenger')
 
@@ -49,3 +51,15 @@ def update_passenger_info():
         data['mile_score']
     )
     return {'success': True}
+
+
+@passenger_management.route('/get_airline', methods=['POST'])
+def get_airline_info():
+    data = request.get_json(silent=True)
+    start = data['start']
+    destination = data['destination']
+    start_date = data['start_date']
+    if get_airline(start, destination, start_date):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': 'requirement is not exist.'}

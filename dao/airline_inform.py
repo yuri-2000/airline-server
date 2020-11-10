@@ -1,4 +1,5 @@
 from tools.global_var import db
+from datetime import date
 
 
 class Airline(db.Model):
@@ -10,8 +11,8 @@ class Airline(db.Model):
     destination = db.Column(db.String(20))
     flight_num = db.Column(db.String(20))
     air_model = db.Column(db.String(20))
-    start_time = db.Column(db.DateTime, default=db.datetime.datetime.now)
-    arrive_time = db.Column(db.DateTime, default=db.datetime.datetime.now)
+    start_time = db.Column(db.DateTime)
+    arrive_time = db.Column(db.DateTime)
     passenger_num_eco = db.Column(db.Integer)
     passenger_num_fir = db.Column(db.Integer)
     mileage = db.Column(db.FLOAT)

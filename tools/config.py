@@ -1,7 +1,7 @@
 import os
 
 HOST = '127.0.0.1'
-PASSWORD = 'daiski'
+PASSWORD = ''
 PORT = '3306'
 DATABASE = 'airline'
 USERNAME = 'root'
