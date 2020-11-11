@@ -56,10 +56,5 @@ def update_passenger_info():
 @passenger_management.route('/get_airline', methods=['POST'])
 def get_airline_info():
     data = request.get_json(silent=True)
-    start = data['start']
-    destination = data['destination']
-    start_date = data['start_date']
-    if get_airline(start, destination, start_date):
-        return {'success': True}
-    else:
-        return {'success': False, 'info': 'requirement is not exist.'}
+    airline_info = get_airline(data['start'], data['destination'], data['start_date'])
+    return {'success': True, 'airline_info': airline_info}
