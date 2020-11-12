@@ -5,9 +5,6 @@ from tools.global_var import db
 def add_passenger(
         username: str,
         password: str,
-        # name: str,
-        # type:
-        # mile_score: str,
 ) -> bool:
     query_res = Passenger.query.filter_by(username=username)
     passenger = query_res.first()
