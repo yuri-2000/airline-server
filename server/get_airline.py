@@ -13,7 +13,9 @@ def get_airline(start, des, date):
         'flight_num': airline.flight_num,
         'start': airline.start,
         'destination': airline.destination,
-        'start_date': airline.start_time,
+        'start_date': str(airline.start_time),
         'standard_price': airline.standard_price
     }for airline in airlines]
     return result
+
+

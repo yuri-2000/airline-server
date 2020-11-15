@@ -5,7 +5,7 @@ from flask import request
 from server.admin_login import *
 from server.add_admin import *
 from server.get_admin import get_admin
-from server.airline_management import get_airline
+from server.airline_management import *
 from server.add_airline import add_airline
 
 admin_management = Blueprint('admin', __name__, url_prefix='/admin')
@@ -64,7 +64,7 @@ def get_airline_info():
 def add_airline_info():
     data = request.get_json(silent=True)
     if add_airline(
-        data['airline_company_id'],
+        data['a_c_id'],
         data['start'],
         data['destination'],
         data['air_model'],
@@ -79,3 +79,10 @@ def add_airline_info():
         return {'success': True}
     else:
         return {'success': False, 'info': "airline exist"}
+
+
+@admin_management.route('/get_airline_info', methods=['POST'])
+def init_airline():
+    data = request.get_json(silent=True)
+    a_info: Dict[str, str] = get_airline_id(data['a_id'])
+    return {'success': True, 'a_info': a_info}
