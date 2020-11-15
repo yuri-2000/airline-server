@@ -2,10 +2,11 @@ from flask.blueprints import Blueprint
 from typing import *
 import datetime
 from flask import request
-from server.admin_login import admin_login
+from server.admin_login import *
 from server.add_admin import *
 from server.get_admin import get_admin
 from server.airline_management import get_airline
+from server.add_airline import add_airline
 
 admin_management = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -16,7 +17,7 @@ def login():
     username: str = data['username']
     password: str = data['password']
     if admin_login(username, password):
-        admin_id = admin_login(username, password)
+        admin_id = admin_login_id(username, password)
         return {'success': True, 'id': admin_id}
     else:
         return {'success': False, 'info': 'username or password incorrect.'}
@@ -58,3 +59,23 @@ def get_airline_info():
     airline_info = get_airline(data['id'])
     return {'success': True, 'airline_info': airline_info}
 
+
+@admin_management.route('/add_airline', methods=['POST'])
+def add_airline_info():
+    data = request.get_json(silent=True)
+    if add_airline(
+        data['airline_company_id'],
+        data['start'],
+        data['destination'],
+        data['air_model'],
+        data['flight_num'],
+        data['start_date'],
+        data['arrive_date'],
+        data['eco'],
+        data['fir'],
+        data['mileage'],
+        data['standard_price']
+    ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "airline exist"}
