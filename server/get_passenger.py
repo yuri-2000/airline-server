@@ -9,6 +9,7 @@ def get_passenger(username: str):
         'id': passenger.id,
         'username': passenger.username,
         'name': passenger.name,
+        'gender': passenger.gender,
         'type': passenger.type,
         'mile_score': passenger.mile_score,
     }

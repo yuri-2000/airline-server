@@ -24,6 +24,7 @@ def add_passenger_info(
         username: str,
         password: str,
         name: str,
+        gender: str,
         type: str,
         mile_score: str
 ):
@@ -34,6 +35,7 @@ def add_passenger_info(
             username=username,
             password=password,
             name=name,
+            gender=gender,
             type=type,
             mile_score=mile_score
         )
@@ -43,6 +45,7 @@ def add_passenger_info(
             passenger.password = password
         passenger.username = username
         passenger.name = name
+        passenger.gender = gender
         passenger.type = type
         passenger.mile_score = mile_score
     db.session.commit()

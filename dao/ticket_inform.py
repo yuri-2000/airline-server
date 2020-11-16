@@ -11,4 +11,3 @@ class Ticket(db.Model):
     start = db.Column(db.String(20))
     destination = db.Column(db.String(20))
     date = db.Column(db.DateTime)
-    price = db.Column(db.Integer)

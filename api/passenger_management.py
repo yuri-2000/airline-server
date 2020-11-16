@@ -2,11 +2,12 @@ from flask.blueprints import Blueprint
 from typing import *
 import datetime
 from flask import request
-from server.passenger_login import passenger_login
+from server.passenger_login import *
 from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
 from server.get_airline import get_airline
+from server.get_ticket import get_ticket
 
 passenger_management = Blueprint('passenger', __name__, url_prefix='/passenger')
 
@@ -17,7 +18,8 @@ def login():
     username: str = data['username']
     password: str = data['password']
     if passenger_login(username, password):
-        return {'success': True}
+        passenger_id = passenger_login_id(username, password)
+        return {'success': True, 'id': passenger_id}
     else:
         return {'success': False, 'info': 'username or password incorrect.'}
 
@@ -28,7 +30,8 @@ def add_passenger():
     username = data['username']
     password = data['password']
     if add_passenger_api(username, password):
-        return {'success': True}
+        passenger_id = passenger_login_id(username, password)
+        return {'success': True, 'id': passenger_id}
     else:
         return {'success': False, 'info': "user exist"}
 
@@ -47,6 +50,7 @@ def update_passenger_info():
         data['username'],
         data['password'],
         data['name'],
+        data['gender'],
         data['type'],
         data['mile_score']
     )
@@ -58,3 +62,10 @@ def get_airline_info():
     data = request.get_json(silent=True)
     airline_info = get_airline(data['start'], data['destination'], data['start_date'])
     return {'success': True, 'airline_info': airline_info}
+
+
+@passenger_management.route('/get_ticket', methods=['POST'])
+def get_ticket_info():
+    data = request.get_json(silent=True)
+    ticket_info = get_ticket(data['id'])
+    return {'success': True, 'ticket_info': ticket_info}
