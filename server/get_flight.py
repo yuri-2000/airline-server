@@ -26,3 +26,13 @@ def get_flight(start, des, date):
         'standard_price': flight.standard_price
     } for flight in flights]
     return result
+
+
+def get_flight_all():
+    flights = Flight.query.all()
+    result: List[Dict[str]] = [{
+        'id': flight.id,
+        'flight_num': flight.flight_num,
+        'date': str(flight.date)
+    } for flight in flights]
+    return result

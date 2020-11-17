@@ -8,6 +8,8 @@ from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
 from server.get_flight import get_flight
 from server.get_ticket import get_ticket
+from server.choose_seat import *
+
 
 passenger_management = Blueprint('passenger', __name__, url_prefix='/passenger')
 
@@ -69,3 +71,10 @@ def get_ticket_info():
     data = request.get_json(silent=True)
     ticket_info = get_ticket(data['id'])
     return {'success': True, 'ticket_info': ticket_info}
+
+
+@passenger_management.route('/get_seat', methods=['POST'])
+def get_seat_info():
+    data = request.get_json(silent=True)
+    length = get_seat(data['a_id'])
+    return {'success': True, 'length': length}

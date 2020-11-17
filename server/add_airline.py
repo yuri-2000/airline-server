@@ -3,6 +3,7 @@ from tools.global_var import db
 
 
 def add_airline(
+        a_id: int,
         airline_company_id: int,
         start: str,
         destination: str,
@@ -15,17 +16,7 @@ def add_airline(
         mileage: int,
         standard_price: int
 ) -> bool:
-    query_res = Airline.query.filter_by(Airline_company_id=airline_company_id,
-                                        start=start,
-                                        destination=destination,
-                                        air_model=air_model,
-                                        flight_num=flight_num,
-                                        start_time=start_time,
-                                        arrive_time=arrive_time,
-                                        passenger_num_eco=eco,
-                                        passenger_num_fir=fir,
-                                        mileage=mileage,
-                                        standard_price=standard_price)
+    query_res = Airline.query.filter_by(id=a_id)
     airline = query_res.first()
     if not airline:
         airline = Airline(
@@ -43,6 +34,15 @@ def add_airline(
         )
         db.session.add(airline)
     else:
-        return False
+        airline.airline_company_id = airline_company_id
+        airline.start = start
+        airline.destination = destination
+        airline.air_model = air_model
+        airline.flight_num = flight_num
+        airline.arrive_time = arrive_time
+        airline.passenger_num_eco = eco
+        airline.passenger_num_fir = fir
+        airline.mileage = mileage
+        airline.standard_price = standard_price
     db.session.commit()
     return True
