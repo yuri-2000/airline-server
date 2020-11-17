@@ -6,7 +6,7 @@ from server.passenger_login import *
 from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
-from server.get_airline import get_airline
+from server.get_flight import get_flight
 from server.get_ticket import get_ticket
 
 passenger_management = Blueprint('passenger', __name__, url_prefix='/passenger')
@@ -57,11 +57,11 @@ def update_passenger_info():
     return {'success': True}
 
 
-@passenger_management.route('/get_airline', methods=['POST'])
+@passenger_management.route('/get_flight', methods=['POST'])
 def get_airline_info():
     data = request.get_json(silent=True)
-    airline_info = get_airline(data['start'], data['destination'], data['start_date'])
-    return {'success': True, 'airline_info': airline_info}
+    flight_info = get_flight(data['start'], data['destination'], data['start_date'])
+    return {'success': True, 'flight_info': flight_info}
 
 
 @passenger_management.route('/get_ticket', methods=['POST'])
