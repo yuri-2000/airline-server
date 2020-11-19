@@ -78,3 +78,17 @@ def get_seat_info():
     data = request.get_json(silent=True)
     length = get_seat(data['a_id'])
     return {'success': True, 'length': length}
+
+
+@passenger_management.route('/add_ticket', methods=['POST'])
+def add_ticket_info():
+    data = request.get_json(silent=True)
+    add_ticket(
+            data['id'],
+            data['f_id'],
+            data['seat_num'],
+            data['CLass'],
+            data['start'],
+            data['destination'],
+            )
+    return {'success': True}

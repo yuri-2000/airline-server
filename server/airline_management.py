@@ -37,3 +37,15 @@ def get_airline_id(a_id):
         'standard_price': airline.standard_price
     }
     return result
+
+
+def get_airline_all():
+    airlines = Airline.query.all()
+    result: List[Dict[str]] = [{
+        'airline_id': airline.id,
+        'start': airline.start,
+        'destination': airline.destination,
+        'start_time': str(airline.start_time),
+        'mileage': airline.mileage,
+    } for airline in airlines]
+    return result
