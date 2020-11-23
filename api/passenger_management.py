@@ -99,8 +99,8 @@ def add_ticket_info():
 @passenger_management.route('/get_seat_all', methods=['POST'])
 def get_all_seat():
     data = request.get_json(silent=True)
-    s_info = get_seat_all(data['f_id'])
-    return {'success': True, 's_info': s_info}
+    e_info, f_info = get_seat_all(data['f_id'])
+    return {'success': True, 'e_info': e_info, 'f_info': f_info}
 
 
 @passenger_management.route('/delete_ticket', methods=['POST'])

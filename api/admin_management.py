@@ -8,8 +8,10 @@ from server.get_admin import get_admin
 from server.airline_management import *
 from server.add_airline import *
 from server.add_airport import add_airport
-from server.add_flight import add_flight
-from server.get_flight import get_flight_all
+from server.add_flight import *
+from server.get_flight import *
+from server.add_airplane import add_airplane
+from server.get_airplane import get_airplane_all
 
 
 admin_management = Blueprint('admin', __name__, url_prefix='/admin')
@@ -76,8 +78,7 @@ def update_airline_info():
             data['flight_num'],
             data['start_time'],
             data['arrive_time'],
-            data['eco'],
-            data['fir'],
+            data['quota'],
             data['mileage'],
             data['standard_price']
     ):
@@ -97,8 +98,7 @@ def add_airline_info():
             data['flight_num'],
             data['start_time'],
             data['arrive_time'],
-            data['eco'],
-            data['fir'],
+            data['quota'],
             data['mileage'],
             data['standard_price']
     ):
@@ -112,6 +112,13 @@ def init_airline():
     data = request.get_json(silent=True)
     a_info: Dict[str, str] = get_airline_id(data['a_id'])
     return {'success': True, 'a_info': a_info}
+
+
+@admin_management.route('/get_flight_info', methods=['POST'])
+def init_flight():
+    data = request.get_json(silent=True)
+    f_info: Dict[str, str] = get_flight_id(data['f_id'])
+    return {'success': True, 'f_info': f_info}
 
 
 @admin_management.route('/add_airport', methods=['POST'])
@@ -144,7 +151,8 @@ def add_flight_info():
 
 @admin_management.route('/get_flight_all', methods=['POST'])
 def get_all_flight():
-    flight_info = get_flight_all()
+    data = request.get_json(silent=True)
+    flight_info = get_flight_all(data['id'])
     return {'success': True, 'flight_info': flight_info}
 
 
@@ -154,10 +162,32 @@ def get_all_airline():
     return {'success': True, 'airline_info': airline_info}
 
 
-@admin_management.route('/delete_airline', methods=['POST'])
-def delete_airline_info():
+@admin_management.route('/get_airplane_all', methods=['POST'])
+def get_all_airplane():
+    airplane_info = get_airplane_all()
+    return {'success': True, 'airplane_info': airplane_info}
+
+
+@admin_management.route('/add_airplane', methods=['POST'])
+def add_airplane_info():
     data = request.get_json(silent=True)
-    if delete_airline(data['a_id']):
+    if add_airplane(data['id'], data['air_model'], data['eco'], data['fir']):
         return {'success': True}
     else:
         return {'success': False, 'info': "error"}
+
+
+@admin_management.route('/update_flight', methods=['POST'])
+def update_flight_info():
+    data = request.get_json(silent=True)
+    if update_flight(
+            data['f_id'],
+            data['airport_id'],
+            data['airline_id'],
+            data['airplane_id'],
+            data['flight_num'],
+            data['start_date'],
+    ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "flight exist"}

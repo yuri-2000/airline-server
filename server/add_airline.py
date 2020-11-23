@@ -11,8 +11,7 @@ def add_airline(
         flight_num: str,
         start_time: str,
         arrive_time: str,
-        eco: int,
-        fir: int,
+        quota: int,
         mileage: int,
         standard_price: int
 ) -> bool:
@@ -24,8 +23,7 @@ def add_airline(
         flight_num=flight_num,
         start_time=start_time,
         arrive_time=arrive_time,
-        passenger_num_eco=eco,
-        passenger_num_fir=fir,
+        passenger_quota=quota,
         mileage=mileage,
         standard_price=standard_price
     ).first()
@@ -38,8 +36,7 @@ def add_airline(
             flight_num=flight_num,
             start_time=start_time,
             arrive_time=arrive_time,
-            passenger_num_eco=eco,
-            passenger_num_fir=fir,
+            passenger_quota=quota,
             mileage=mileage,
             standard_price=standard_price
         )
@@ -59,8 +56,7 @@ def update_airline(
         flight_num: str,
         start_time: str,
         arrive_time: str,
-        eco: int,
-        fir: int,
+        quota: int,
         mileage: int,
         standard_price: int
 ) -> bool:
@@ -75,8 +71,7 @@ def update_airline(
             flight_num=flight_num,
             start_time=start_time,
             arrive_time=arrive_time,
-            passenger_num_eco=eco,
-            passenger_num_fir=fir,
+            passenger_quota=quota,
             mileage=mileage,
             standard_price=standard_price
         )
@@ -88,16 +83,11 @@ def update_airline(
         airline.air_model = air_model
         airline.flight_num = flight_num
         airline.arrive_time = arrive_time
-        airline.passenger_num_eco = eco
-        airline.passenger_num_fir = fir
+        airline.passenger_quota = quota
         airline.mileage = mileage
         airline.standard_price = standard_price
     db.session.commit()
     return True
 
 
-def delete_airline(a_id):
-    airline = Airline.query.filter_by(id=a_id).first()
-    flight = Flight.query.filter_by(Airline_id=a_id).first()
-    db.session.delete(airline)
-    db.session.commit()
+

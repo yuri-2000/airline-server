@@ -11,20 +11,24 @@ from typing import *
 def get_seat_all(f_id):
     flight = Flight.query.filter_by(id=f_id).first()
     airplane = Airplane.query.filter_by(id=flight.Airplane_id).first()
-    seats = Seat.query.filter_by(Airplane_id=airplane.id).all()
-    result: List[Dict[str]] = [{
-        'CLass': seat.CLASS,
-        'seat_num': seat.seat_num,
-    } for seat in seats]
-    return result
+    ecos = Seat.query.filter_by(Airplane_id=airplane.id, CLASS='eco').all()
+    firs = Seat.query.filter_by(Airplane_id=airplane.id, CLASS='fir').all()
+    eco_result: List[Dict[str]] = [{
+        'seat_num': eco.seat_num,
+    } for eco in ecos]
+    fir_result: List[Dict[str]] = [{
+        'seat_num': fir.seat_num,
+    } for fir in firs]
+    return eco_result, fir_result
 
 
 def get_seat(f_id, id):
     flight = Flight.query.filter_by(id=f_id).first()
+    airplane = Airplane.query.filter_by(id=flight.Airplane_id).first()
     airline = Airline.query.filter_by(id=flight.Airline_id).first()
     passenger = Passenger.query.filter_by(id=id).first()
-    eco = airline.passenger_num_eco
-    fir = airline.passenger_num_fir
+    eco = airplane.passenger_num_eco
+    fir = airplane.passenger_num_fir
     standard_price = airline.standard_price
     type = passenger.type
     return eco, fir, standard_price, type

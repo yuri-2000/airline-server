@@ -3,6 +3,7 @@ from dao.airline_inform import Airline
 from dao.airport_inform import Airport
 from dao.seat_inform import Seat
 from dao.flight_inform import Flight
+from dao.airplane_inform import Airplane
 from typing import *
 
 
@@ -29,11 +30,33 @@ def get_flight(start, des, date):
     return result
 
 
-def get_flight_all():
-    flights = Flight.query.all()
-    result: List[Dict[str]] = [{
-        'id': flight.id,
+def get_flight_id(f_id):
+    flight = Flight.query.filter_by(id=f_id).first()
+    airport = Airport.query.filter_by(id=flight.Airport_id).first()
+    result: Dict[str] = {
+        'a_id': flight.Airline_id,
+        'airport_id': flight.Airport_id,
+        'airport_name': airport.name,
+        'airplane_id': flight.Airplane_id,
         'flight_num': flight.flight_num,
-        'date': str(flight.date)
+        'date': str(flight.date),
+    }
+    return result
+
+
+def get_flight_all(id):
+    flights = Flight.query.join(Airline, Airline.id == Flight.Airline_id). \
+        join(Airline_company, Airline_company.id == Airline.Airline_company_id). \
+        join(Airplane, Airplane.id == Flight.Airplane_id). \
+        filter(Airline_company.id == id). \
+        with_entities(Flight.id, Flight.flight_num, Airplane.passenger_num_eco, Airplane.passenger_num_fir,
+                      Flight.date, Airplane.air_model).all()
+    result: List[Dict[str]] = [{
+        'f_id': flight.id,
+        'air_model': flight.air_model,
+        'flight_num': flight.flight_num,
+        'eco': flight.passenger_num_eco,
+        'fir': flight.passenger_num_fir,
+        'date': str(flight.date),
     } for flight in flights]
     return result

@@ -10,3 +10,4 @@ class Flight(db.Model):
     Airplane_id = db.Column(db.Integer, db.ForeignKey('Airplane.id'))  # 航班-飞机 1:n 外键
     flight_num = db.Column(db.String(20))
     date = db.Column(db.Date)
+

@@ -6,3 +6,5 @@ class Airplane(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Airline_company_id = db.Column(db.Integer, db.ForeignKey('Airline_company.id'))  # 航空公司-飞机 1:n 外键
     air_model = db.Column(db.String(20))
+    passenger_num_eco = db.Column(db.Integer)
+    passenger_num_fir = db.Column(db.Integer)
