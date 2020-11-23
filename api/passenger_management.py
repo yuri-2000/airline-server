@@ -2,11 +2,14 @@ from flask.blueprints import Blueprint
 from typing import *
 import datetime
 from flask import request
-from server.passenger_login import passenger_login
+from server.passenger_login import *
 from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
-from server.get_airline import get_airline
+from server.get_flight import get_flight
+from server.get_ticket import *
+from server.choose_seat import *
+
 
 passenger_management = Blueprint('passenger', __name__, url_prefix='/passenger')
 
@@ -17,7 +20,8 @@ def login():
     username: str = data['username']
     password: str = data['password']
     if passenger_login(username, password):
-        return {'success': True}
+        passenger_id = passenger_login_id(username, password)
+        return {'success': True, 'id': passenger_id}
     else:
         return {'success': False, 'info': 'username or password incorrect.'}
 
@@ -28,7 +32,8 @@ def add_passenger():
     username = data['username']
     password = data['password']
     if add_passenger_api(username, password):
-        return {'success': True}
+        passenger_id = passenger_login_id(username, password)
+        return {'success': True, 'id': passenger_id}
     else:
         return {'success': False, 'info': "user exist"}
 
@@ -47,14 +52,61 @@ def update_passenger_info():
         data['username'],
         data['password'],
         data['name'],
+        data['gender'],
         data['type'],
         data['mile_score']
     )
     return {'success': True}
 
 
-@passenger_management.route('/get_airline', methods=['POST'])
+@passenger_management.route('/get_flight', methods=['POST'])
 def get_airline_info():
     data = request.get_json(silent=True)
-    airline_info = get_airline(data['start'], data['destination'], data['start_date'])
-    return {'success': True, 'airline_info': airline_info}
+    flight_info = get_flight(data['start'], data['destination'], data['start_date'])
+    return {'success': True, 'flight_info': flight_info}
+
+
+@passenger_management.route('/get_ticket', methods=['POST'])
+def get_ticket_info():
+    data = request.get_json(silent=True)
+    ticket_info = get_ticket(data['id'])
+    return {'success': True, 'ticket_info': ticket_info}
+
+
+@passenger_management.route('/get_seat', methods=['POST'])
+def get_seat_info():
+    data = request.get_json(silent=True)
+    eco, fir, standard_price, type = get_seat(data['f_id'], data['id'])
+    return {'success': True, 'eco': eco, 'fir': fir, 'standard_price': standard_price, 'type': type}
+
+
+@passenger_management.route('/add_ticket', methods=['POST'])
+def add_ticket_info():
+    data = request.get_json(silent=True)
+    if add_ticket(
+            data['id'],
+            data['f_id'],
+            data['seat_num'],
+            data['CLass'],
+            data['start'],
+            data['destination'],
+            ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': 'error.'}
+
+
+@passenger_management.route('/get_seat_all', methods=['POST'])
+def get_all_seat():
+    data = request.get_json(silent=True)
+    s_info = get_seat_all(data['f_id'])
+    return {'success': True, 's_info': s_info}
+
+
+@passenger_management.route('/delete_ticket', methods=['POST'])
+def delete_ticket_info():
+    data = request.get_json(silent=True)
+    if delete_ticket(data['checked']):
+        return {'success': True}
+    else:
+        return False

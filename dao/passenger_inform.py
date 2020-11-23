@@ -7,5 +7,6 @@ class Passenger(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(20))
+    gender = db.Column(db.String(128), default='male')
     type = db.Column(db.String(20), default='普通旅客')
-    mile_score = db.Column(db.String(20), default=0)
+    mile_score = db.Column(db.Integer, default=0)

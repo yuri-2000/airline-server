@@ -6,7 +6,11 @@ from server.admin_login import *
 from server.add_admin import *
 from server.get_admin import get_admin
 from server.airline_management import *
-from server.add_airline import add_airline
+from server.add_airline import *
+from server.add_airport import add_airport
+from server.add_flight import add_flight
+from server.get_flight import get_flight_all
+
 
 admin_management = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -29,7 +33,7 @@ def register_admin():
     username = data['username']
     password = data['password']
     if add_admin(username, password):
-        admin_id = admin_login(username, password)
+        admin_id = admin_login_id(username, password)
         return {'success': True, 'id': admin_id}
     else:
         return {'success': False, 'info': "user exist"}
@@ -60,21 +64,43 @@ def get_airline_info():
     return {'success': True, 'airline_info': airline_info}
 
 
+@admin_management.route('/update_airline', methods=['POST'])
+def update_airline_info():
+    data = request.get_json(silent=True)
+    if update_airline(
+            data['a_id'],
+            data['a_c_id'],
+            data['start'],
+            data['destination'],
+            data['air_model'],
+            data['flight_num'],
+            data['start_time'],
+            data['arrive_time'],
+            data['eco'],
+            data['fir'],
+            data['mileage'],
+            data['standard_price']
+    ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "airline exist"}
+
+
 @admin_management.route('/add_airline', methods=['POST'])
 def add_airline_info():
     data = request.get_json(silent=True)
     if add_airline(
-        data['a_c_id'],
-        data['start'],
-        data['destination'],
-        data['air_model'],
-        data['flight_num'],
-        data['start_date'],
-        data['arrive_date'],
-        data['eco'],
-        data['fir'],
-        data['mileage'],
-        data['standard_price']
+            data['a_c_id'],
+            data['start'],
+            data['destination'],
+            data['air_model'],
+            data['flight_num'],
+            data['start_time'],
+            data['arrive_time'],
+            data['eco'],
+            data['fir'],
+            data['mileage'],
+            data['standard_price']
     ):
         return {'success': True}
     else:
@@ -86,3 +112,52 @@ def init_airline():
     data = request.get_json(silent=True)
     a_info: Dict[str, str] = get_airline_id(data['a_id'])
     return {'success': True, 'a_info': a_info}
+
+
+@admin_management.route('/add_airport', methods=['POST'])
+def add_airport_info():
+    data = request.get_json(silent=True)
+    if add_airport(
+            data['name'],
+            data['address'],
+            data['telephone'],
+    ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "airport exist"}
+
+
+@admin_management.route('/add_flight', methods=['POST'])
+def add_flight_info():
+    data = request.get_json(silent=True)
+    if add_flight(
+            data['airport_id'],
+            data['airline_id'],
+            data['airplane_id'],
+            data['flight_num'],
+            data['start_date']
+    ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "flight exist"}
+
+
+@admin_management.route('/get_flight_all', methods=['POST'])
+def get_all_flight():
+    flight_info = get_flight_all()
+    return {'success': True, 'flight_info': flight_info}
+
+
+@admin_management.route('/get_airline_all', methods=['POST'])
+def get_all_airline():
+    airline_info = get_airline_all()
+    return {'success': True, 'airline_info': airline_info}
+
+
+@admin_management.route('/delete_airline', methods=['POST'])
+def delete_airline_info():
+    data = request.get_json(silent=True)
+    if delete_airline(data['a_id']):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "error"}

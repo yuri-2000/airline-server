@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_cors import CORS
+from flask_cors import *
 from tools.global_var import db
 import config
 from api.passenger_management import passenger_management

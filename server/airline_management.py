@@ -13,7 +13,7 @@ def get_airline(a_id):
         'flight_num': airline.flight_num,
         'start': airline.start,
         'destination': airline.destination,
-        'start_date': str(airline.start_time),
+        'start_time': str(airline.start_time),
         'standard_price': airline.standard_price
     } for airline in airlines]
     return result
@@ -29,11 +29,23 @@ def get_airline_id(a_id):
         'destination': airline.destination,
         'air_model': airline.air_model,
         'flight_num': airline.flight_num,
-        'start_date': str(airline.start_time),
-        'arrive_date': str(airline.arrive_time),
+        'start_time': str(airline.start_time),
+        'arrive_time': str(airline.arrive_time),
         'eco': airline.passenger_num_eco,
         'fir': airline.passenger_num_fir,
         'mileage': airline.mileage,
         'standard_price': airline.standard_price
     }
+    return result
+
+
+def get_airline_all():
+    airlines = Airline.query.all()
+    result: List[Dict[str]] = [{
+        'airline_id': airline.id,
+        'start': airline.start,
+        'destination': airline.destination,
+        'start_time': str(airline.start_time),
+        'mileage': airline.mileage,
+    } for airline in airlines]
     return result

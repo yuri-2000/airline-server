@@ -25,7 +25,7 @@ def add_admin_info(
     query_res = Airline_company.query.filter_by(username=username)
     admin = query_res.first()
     if not admin:
-        admin = admin(
+        admin = Airline_company(
             username=username,
             password=password,
             name=name,
