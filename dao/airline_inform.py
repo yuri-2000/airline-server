@@ -14,5 +14,5 @@ class Airline(db.Model):
     arrive_time = db.Column(db.TIME)
     passenger_num_eco = db.Column(db.Integer)
     passenger_num_fir = db.Column(db.Integer)
-    mileage = db.Column(db.FLOAT)
+    mileage = db.Column(db.Integer)
     standard_price = db.Column(db.Integer)

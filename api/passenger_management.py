@@ -7,7 +7,7 @@ from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
 from server.get_flight import get_flight
-from server.get_ticket import get_ticket
+from server.get_ticket import *
 from server.choose_seat import *
 
 
@@ -76,19 +76,37 @@ def get_ticket_info():
 @passenger_management.route('/get_seat', methods=['POST'])
 def get_seat_info():
     data = request.get_json(silent=True)
-    length = get_seat(data['a_id'])
-    return {'success': True, 'length': length}
+    eco, fir, standard_price, type = get_seat(data['f_id'], data['id'])
+    return {'success': True, 'eco': eco, 'fir': fir, 'standard_price': standard_price, 'type': type}
 
 
 @passenger_management.route('/add_ticket', methods=['POST'])
 def add_ticket_info():
     data = request.get_json(silent=True)
-    add_ticket(
+    if add_ticket(
             data['id'],
             data['f_id'],
             data['seat_num'],
             data['CLass'],
             data['start'],
             data['destination'],
-            )
-    return {'success': True}
+            ):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': 'error.'}
+
+
+@passenger_management.route('/get_seat_all', methods=['POST'])
+def get_all_seat():
+    data = request.get_json(silent=True)
+    s_info = get_seat_all(data['f_id'])
+    return {'success': True, 's_info': s_info}
+
+
+@passenger_management.route('/delete_ticket', methods=['POST'])
+def delete_ticket_info():
+    data = request.get_json(silent=True)
+    if delete_ticket(data['checked']):
+        return {'success': True}
+    else:
+        return False

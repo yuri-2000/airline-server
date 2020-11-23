@@ -1,4 +1,5 @@
 from dao.airline_inform import Airline
+from dao.flight_inform import Flight
 from tools.global_var import db
 
 
@@ -93,3 +94,10 @@ def update_airline(
         airline.standard_price = standard_price
     db.session.commit()
     return True
+
+
+def delete_airline(a_id):
+    airline = Airline.query.filter_by(id=a_id).first()
+    flight = Flight.query.filter_by(Airline_id=a_id).first()
+    db.session.delete(airline)
+    db.session.commit()

@@ -1,6 +1,7 @@
 from dao.airline_company_inform import Airline_company
 from dao.airline_inform import Airline
 from dao.airport_inform import Airport
+from dao.seat_inform import Seat
 from dao.flight_inform import Flight
 from typing import *
 

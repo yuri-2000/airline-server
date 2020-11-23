@@ -152,3 +152,12 @@ def get_all_flight():
 def get_all_airline():
     airline_info = get_airline_all()
     return {'success': True, 'airline_info': airline_info}
+
+
+@admin_management.route('/delete_airline', methods=['POST'])
+def delete_airline_info():
+    data = request.get_json(silent=True)
+    if delete_airline(data['a_id']):
+        return {'success': True}
+    else:
+        return {'success': False, 'info': "error"}
