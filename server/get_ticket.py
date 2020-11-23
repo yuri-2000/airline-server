@@ -1,6 +1,5 @@
 from dao.ticket_inform import Ticket
 from dao.seat_inform import Seat
-from dao.passenger_flight_table import passenger_flight
 from dao.passenger_inform import Passenger
 from dao.flight_inform import Flight
 from typing import *
@@ -33,11 +32,9 @@ def delete_ticket(checked):
     for value in checked:
         ticket = Ticket.query.filter_by(id=value).first()
         seat = Seat.query.filter_by(id=ticket.Seat_id).first()
-        p_f = passenger_flight.query.filter_by(Passenger_id=ticket.Passenger_id, Flight_id=ticket.flight_id).first()
         flight = Flight.query.filter_by(id=ticket.flight_id).first()
         airline = Airline.query.filter_by(id=flight.Airline_id).first()
         passenger = Passenger.query.filter_by(id=ticket.Passenger_id).first()
-        db.session.delete(p_f)
         db.session.delete(ticket)
         db.session.delete(seat)
         passenger.mile_score -= int(airline.mileage)

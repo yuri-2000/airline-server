@@ -4,7 +4,6 @@ from dao.flight_inform import Flight
 from dao.airplane_inform import Airplane
 from dao.ticket_inform import Ticket
 from tools.global_var import db
-from dao.passenger_flight_table import passenger_flight
 from dao.passenger_inform import Passenger
 from typing import *
 
@@ -44,16 +43,15 @@ def add_ticket(id, f_id, seat_num, CLass, start, destination) -> bool:
                              CLASS=CLass).first()
     ticket = Ticket(Airport_id=flight.Airport_id, flight_id=f_id, Passenger_id=id, Seat_id=s.id,
                     start=start, destination=destination, date=flight.date)
-    res = passenger_flight.query.filter_by(Passenger_id=id, Flight_id=f_id).first()
     passenger = Passenger.query.filter_by(id=id).first()
     airline = Airline.query.filter_by(id=flight.Airline_id).first()
     passenger.mile_score += int(airline.mileage)
-    if not res:
-        res = passenger_flight(
-            Passenger_id=id,
-            Flight_id=f_id
-        )
-        db.session.add(res)
+    if 100 <= passenger.mile_score < 300:
+        passenger.type = 0.9
+    elif 300 <= passenger.mile_score < 500:
+        passenger.type = 0.7
+    elif passenger.mile_score >= 500:
+        passenger.type = 0.5
     db.session.add(ticket)
     db.session.commit()
     return True
