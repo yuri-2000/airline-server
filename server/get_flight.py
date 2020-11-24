@@ -1,9 +1,12 @@
+from pymysql.constants.FIELD_TYPE import NULL
+
 from dao.airline_company_inform import Airline_company
 from dao.airline_inform import Airline
 from dao.airport_inform import Airport
 from dao.seat_inform import Seat
 from dao.flight_inform import Flight
 from dao.airplane_inform import Airplane
+from dao.passenger_inform import Passenger
 from typing import *
 
 
@@ -60,3 +63,11 @@ def get_flight_all(id):
         'date': str(flight.date),
     } for flight in flights]
     return result
+
+
+def isempty(id) -> bool:
+    passenger = Passenger.query.filter_by(id=id).first()
+    if passenger.name != 'need to change':
+        return True
+    else:
+        return False

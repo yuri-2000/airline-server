@@ -6,7 +6,7 @@ from server.passenger_login import *
 from server.add_passenger import add_passenger as add_passenger_api
 from server.get_passenger import get_passenger
 from server.add_passenger import add_passenger_info
-from server.get_flight import get_flight
+from server.get_flight import *
 from server.get_ticket import *
 from server.choose_seat import *
 
@@ -110,3 +110,12 @@ def delete_ticket_info():
         return {'success': True}
     else:
         return False
+
+
+@passenger_management.route('/is_empty', methods=['POST'])
+def is_empty():
+    data = request.get_json(silent=True)
+    if isempty(data['id']):
+        return {'success': True, 'result': 1}
+    else:
+        return {'success': False, 'result': 0}

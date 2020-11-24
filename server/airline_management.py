@@ -52,3 +52,8 @@ def get_airline_all():
         'quota': airline.passenger_quota
     } for airline in airlines]
     return result
+
+
+def get_name(id):
+    name = Airline_company.query.filter_by(id=id).first()
+    return name.name

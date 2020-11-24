@@ -13,7 +13,6 @@ from server.get_flight import *
 from server.add_airplane import add_airplane
 from server.get_airplane import get_airplane_all
 
-
 admin_management = Blueprint('admin', __name__, url_prefix='/admin')
 
 
@@ -191,3 +190,13 @@ def update_flight_info():
         return {'success': True}
     else:
         return {'success': False, 'info': "flight exist"}
+
+
+@admin_management.route('/get_name', methods=['POST'])
+def get_company_name():
+    data = request.get_json(silent=True)
+    a_c_name = get_name(
+        data['id'],
+    )
+    return {'success': True, 'a_c_name': a_c_name}
+
