@@ -73,6 +73,13 @@ def get_ticket_info():
     return {'success': True, 'ticket_info': ticket_info}
 
 
+@passenger_management.route('/filter_ticket', methods=['POST'])
+def filter_ticket_info():
+    data = request.get_json(silent=True)
+    ticket_info = filter_ticket(data['id'], data['start_date'], data['flight_num'])
+    return {'success': True, 'ticket_info': ticket_info}
+
+
 @passenger_management.route('/get_seat', methods=['POST'])
 def get_seat_info():
     data = request.get_json(silent=True)

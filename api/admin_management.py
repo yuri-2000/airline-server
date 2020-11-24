@@ -200,3 +200,14 @@ def get_company_name():
     )
     return {'success': True, 'a_c_name': a_c_name}
 
+
+@admin_management.route('/delete_flight', methods=['POST'])
+def delete_flight_info():
+    data = request.get_json(silent=True)
+    if delete_flight(
+        data['f_id'],
+    ):
+        return {'success': True, 'info': 'success'}
+    else:
+        return {'success': False, 'info': 'false'}
+

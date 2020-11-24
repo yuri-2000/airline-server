@@ -1,5 +1,4 @@
-from pymysql.constants.FIELD_TYPE import NULL
-
+from tools.global_var import db
 from dao.airline_company_inform import Airline_company
 from dao.airline_inform import Airline
 from dao.airport_inform import Airport
@@ -7,6 +6,7 @@ from dao.seat_inform import Seat
 from dao.flight_inform import Flight
 from dao.airplane_inform import Airplane
 from dao.passenger_inform import Passenger
+from dao.ticket_inform import Ticket
 from typing import *
 
 
@@ -63,6 +63,18 @@ def get_flight_all(id):
         'date': str(flight.date),
     } for flight in flights]
     return result
+
+
+def delete_flight(f_id) -> bool:
+    flight = Flight.query.filter_by(id=f_id).first()
+    tickets = Ticket.query.filter_by(flight_id=f_id).all()
+    for ticket in tickets:
+        seat = Seat.query.filter_by(id=ticket.Seat_id).first()
+        db.session.delete(ticket)
+        db.session.delete(seat)
+    db.session.delete(flight)
+    db.session.commit()
+    return True
 
 
 def isempty(id) -> bool:

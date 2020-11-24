@@ -28,6 +28,27 @@ def get_ticket(p_id):
     return result
 
 
+def filter_ticket(p_id, date, flight_num):
+    tickets = Ticket.query.join(Flight, Ticket.flight_id == Flight.id). \
+        filter(Ticket.Passenger_id == p_id, Flight.flight_num == flight_num, Flight.date == date). \
+        join(Seat, Seat.id == Ticket.Seat_id). \
+        join(Airline, Airline.id == Flight.Airline_id). \
+        with_entities(Ticket.id, Flight.flight_num, Seat.seat_num, Ticket.start, Ticket.destination,
+                      Airline.start_time, Airline.arrive_time, Flight.date, Seat.CLASS).all()
+    result: List[Dict[str]] = [{
+        't_id': ticket.id,
+        'flight_num': ticket.flight_num,
+        'start': ticket.start,
+        'destination': ticket.destination,
+        'seat_num': ticket.seat_num,
+        'CLass': ticket.CLASS,
+        'start_date': str(ticket.date),
+        'start_time': str(ticket.start_time),
+        'arrive_time': str(ticket.arrive_time)
+    } for ticket in tickets]
+    return result
+
+
 def delete_ticket(checked):
     for value in checked:
         ticket = Ticket.query.filter_by(id=value).first()
