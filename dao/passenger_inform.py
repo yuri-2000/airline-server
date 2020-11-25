@@ -8,5 +8,5 @@ class Passenger(db.Model):
     password = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(20), default='need to change')
     gender = db.Column(db.String(128), default='male')
-    type = db.Column(db.String(20), default='1')
+    type = db.Column(db.Integer, default=1)
     mile_score = db.Column(db.Integer, default=0)

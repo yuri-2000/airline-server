@@ -7,3 +7,4 @@ class Airline_company(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(20))
+    total = db.Column(db.Integer, default='0')

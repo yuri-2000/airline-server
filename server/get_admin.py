@@ -9,5 +9,6 @@ def get_admin(username: str):
         'id': admin.id,
         'username': admin.username,
         'name': admin.name,
+        'total': admin.total
     }
     return result

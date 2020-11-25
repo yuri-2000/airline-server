@@ -20,7 +20,8 @@ def add_admin(username: str, password: str) -> bool:
 def add_admin_info(
         username: str,
         password: str,
-        name: str
+        name: str,
+        total: int
 ):
     query_res = Airline_company.query.filter_by(username=username)
     admin = query_res.first()
@@ -36,4 +37,5 @@ def add_admin_info(
             admin.password = password
         admin.username = username
         admin.name = name
+        admin.total = total
     db.session.commit()

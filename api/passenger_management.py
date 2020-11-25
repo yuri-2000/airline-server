@@ -115,8 +115,6 @@ def delete_ticket_info():
     data = request.get_json(silent=True)
     if delete_ticket(data['checked']):
         return {'success': True}
-    else:
-        return False
 
 
 @passenger_management.route('/is_empty', methods=['POST'])

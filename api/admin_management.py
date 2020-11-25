@@ -53,7 +53,8 @@ def update_admin_info():
     add_admin_info(
         data['username'],
         data['password'],
-        data['name']
+        data['name'],
+        data['total']
     )
     return {'success': True}
 

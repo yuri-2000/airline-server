@@ -30,7 +30,8 @@ def get_ticket(p_id):
 
 def filter_ticket(p_id, date, flight_num):
     tickets = Ticket.query.join(Flight, Ticket.flight_id == Flight.id). \
-        filter(Ticket.Passenger_id == p_id, Flight.flight_num == flight_num, Flight.date == date). \
+        filter(Ticket.Passenger_id == p_id, Flight.flight_num.like("%" + flight_num + "%"),
+               Flight.date.like("%" + date + "%")). \
         join(Seat, Seat.id == Ticket.Seat_id). \
         join(Airline, Airline.id == Flight.Airline_id). \
         with_entities(Ticket.id, Flight.flight_num, Seat.seat_num, Ticket.start, Ticket.destination,
@@ -57,6 +58,7 @@ def delete_ticket(checked):
         airline = Airline.query.filter_by(id=flight.Airline_id).first()
         passenger = Passenger.query.filter_by(id=ticket.Passenger_id).first()
         db.session.delete(ticket)
+        db.session.commit()
         db.session.delete(seat)
         passenger.mile_score -= int(airline.mileage)
         db.session.commit()
